@@ -1,0 +1,19 @@
+{
+  "baseBranch": "develop",
+  "remote": "origin",
+  "branchTemplate": "{type}/{id}-{slug}",
+  "slugMaxLength": 50,
+  "defaultType": "feature",
+  "idSource": "customId",
+  "idCase": "preserve",
+  "inProgressStatus": null,
+  "assignSelf": false,
+  "push": false,
+  "provider": null,
+  "commentOnTicket": false,
+  "typeMap": {
+    "fix": ["bug", "bogue", "anomalie", "hotfix", "incident", "regression"],
+    "feature": ["feature", "story", "user story", "enhancement", "improvement", "evolution", "epic"],
+    "chore": ["chore", "tech", "refactor", "refacto", "ci", "build", "deps", "docs", "test", "config"]
+  }
+}

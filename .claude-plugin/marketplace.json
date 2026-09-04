@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "afifkraiem-plugins",
+  "description": "Claude Code plugins by afifkraiem",
+  "owner": {
+    "name": "Afif Kraiem",
+    "url": "https://github.com/afifkraiem"
+  },
+  "plugins": [
+    {
+      "name": "ticket-branch",
+      "source": "./",
+      "description": "Create a git branch from a ticket in any issue tracker reachable over MCP, and move the ticket to in-progress.",
+      "category": "productivity",
+      "keywords": ["git", "branch", "jira", "linear", "clickup", "github-issues", "workflow"],
+      "license": "MIT",
+      "homepage": "https://github.com/afifkraiem/ticket-branch",
+      "repository": "https://github.com/afifkraiem/ticket-branch"
+    }
+  ]
+}
