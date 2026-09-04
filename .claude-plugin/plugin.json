@@ -1,7 +1,7 @@
 {
   "name": "ticket-branch",
   "description": "Create a git branch from a ticket in any issue tracker reachable over MCP (Jira, Linear, ClickUp, GitHub Issues, GitLab, Asana, Shortcut, Notion, Azure DevOps and others), then move the ticket to in-progress.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Afif Kraiem",
     "url": "https://github.com/afifkraiem"
