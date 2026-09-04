@@ -129,6 +129,7 @@ def build(
     max_slug_length: int = DEFAULT_MAX_SLUG,
     id_case: str = "preserve",
     extra: dict[str, str] | None = None,
+    allow_empty_slug: bool = False,
 ) -> dict:
     formatted_id = format_id(ticket_id, id_case)
     slug = slugify(title, max_slug_length, drop=formatted_id)
@@ -141,6 +142,14 @@ def build(
     values.update(extra or {})
 
     used = set(re.findall(r"\{(\w+)\}", template))
+
+    if "slug" in used and not slug and not allow_empty_slug:
+        raise ValueError(
+            "slug is empty: the title is missing, or reduces to nothing once the id "
+            "and noise prefixes are stripped. Pass a title derived from the ticket "
+            "description, or --allow-empty-slug to build an id-only name."
+        )
+
     unknown = used - values.keys()
     if unknown:
         raise KeyError(
@@ -169,6 +178,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-slug-length", type=int, default=DEFAULT_MAX_SLUG)
     parser.add_argument("--id-case", choices=["preserve", "upper", "lower"], default="preserve")
     parser.add_argument(
+        "--allow-empty-slug",
+        action="store_true",
+        help="accept an id-only name when the title slugifies to nothing",
+    )
+    parser.add_argument(
         "--var",
         action="append",
         default=[],
@@ -195,8 +209,9 @@ def main(argv: list[str] | None = None) -> int:
             max_slug_length=args.max_slug_length,
             id_case=args.id_case,
             extra=extra,
+            allow_empty_slug=args.allow_empty_slug,
         )
-    except KeyError as exc:
+    except (KeyError, ValueError) as exc:
         print(f"error: {exc.args[0]}", file=sys.stderr)
         return 2
 

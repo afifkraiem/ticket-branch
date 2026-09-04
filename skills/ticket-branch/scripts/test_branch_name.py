@@ -32,8 +32,8 @@ eq(name(ticket_id="ABC-42", title="ABC-42: Ajouter l'export CSV", ticket_type="f
    "feature/ABC-42-ajouter-l-export-csv", "id already in title is not repeated")
 eq(name(ticket_id="X-3", title="[Front][URGENT] TODO: corriger le header", ticket_type="fix"),
    "fix/X-3-corriger-le-header", "stacked noise prefixes")
-eq(name(ticket_id="X-1", title="", ticket_type="fix"),
-   "fix/X-1", "empty title leaves no dangling separator")
+eq(name(ticket_id="X-1", title="", ticket_type="fix", allow_empty_slug=True),
+   "fix/X-1", "empty title leaves no dangling separator when explicitly allowed")
 eq(name(ticket_id="PROJ-7", title="🚀 Déployer sur staging", ticket_type="chore", id_case="lower"),
    "chore/proj-7-deployer-sur-staging", "emoji dropped, id lowercased")
 eq(name(ticket_id="prj-9", title="Fix flaky e2e tests", ticket_type="test", template="{type}/{slug}"),
@@ -62,12 +62,23 @@ eq(name(ticket_id="X-2", title="Update yarn lock", ticket_type="chore", template
    "update-yarn-lock", "'lock' without a dot is fine")
 
 print("failure modes")
+for label, kw in [
+    ("empty title with {slug} in template is refused", dict(ticket_id="X-1", title="", ticket_type="fix")),
+    ("title reducing to the id alone is refused", dict(ticket_id="NEX-1234", title="NEX-1234", ticket_type="feature")),
+]:
+    try:
+        build(**kw)
+        eq("no raise", "ValueError", label)
+    except ValueError as exc:
+        eq("description" in exc.args[0], True, label)
+eq(name(ticket_id="X-1", title="", ticket_type="fix", template="{type}/{id}"),
+   "fix/X-1", "template without {slug} needs no title")
 try:
     build(ticket_id="A-1", title="hi", ticket_type="fix", template="{type}/{author}")
     eq("no raise", "KeyError", "unknown placeholder raises")
 except KeyError as exc:
     eq("{author}" in exc.args[0], True, "unknown placeholder raises with a useful message")
-eq(bool(validate_ref(build(ticket_id="", title="!!!", ticket_type="")["branch"])), True,
+eq(bool(validate_ref(build(ticket_id="", title="!!!", ticket_type="", allow_empty_slug=True)["branch"])), True,
    "empty result is invalid")
 
 print(f"\n{PASS} passed, {FAIL} failed")
