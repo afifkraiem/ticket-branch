@@ -1,6 +1,6 @@
 ---
 description: Create a branch from a ticket in your issue tracker, cut from the base branch
-argument-hint: [ticket-id-or-url]
+argument-hint: [ticket-id-or-url] [from <base-branch>]
 allowed-tools: Bash(git fetch:*), Bash(git status:*), Bash(git switch:*), Bash(git branch:*), Bash(git pull:*), Bash(git rev-parse:*), Bash(git ls-remote:*), Bash(git stash:*), Bash(git for-each-ref:*), Bash(python3:*), Read
 ---
 

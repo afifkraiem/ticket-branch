@@ -111,14 +111,15 @@ git fetch <remote>
 
 Resolve the base branch in this order, stopping at the first that yields a branch:
 
-1. `config.baseBranch`
-2. `develop`, if it exists locally or on the remote
-3. `git symbolic-ref refs/remotes/<remote>/HEAD`
-4. the `HEAD branch` line from `git remote show <remote>`
-5. the first of `main`, `master`, `trunk` that exists
-6. otherwise, ask
+1. a base named explicitly in the request ("start NEX-1234 from main", `/branch NEX-1234 from main`) — an explicit ask wins over everything, config included; if that branch doesn't exist locally or on the remote, say so and ask rather than falling through silently
+2. `config.baseBranch`
+3. `develop`, if it exists locally or on the remote
+4. `git symbolic-ref refs/remotes/<remote>/HEAD`
+5. the `HEAD branch` line from `git remote show <remote>`
+6. the first of `main`, `master`, `trunk` that exists
+7. otherwise, ask
 
-Steps 3 and 4 look redundant but aren't, and neither is reliable: `origin/HEAD` is unset in repos that were initialized locally rather than cloned, and `git remote show` reports `(unknown)` for remotes without it while also costing a network round trip. Don't treat "the remote's default branch" as something you can always look up.
+Steps 4 and 5 look redundant but aren't, and neither is reliable: `origin/HEAD` is unset in repos that were initialized locally rather than cloned, and `git remote show` reports `(unknown)` for remotes without it while also costing a network round trip. Don't treat "the remote's default branch" as something you can always look up.
 
 Then land on it:
 
